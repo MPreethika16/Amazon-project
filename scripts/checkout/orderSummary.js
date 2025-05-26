@@ -10,7 +10,8 @@ import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { deliveryOptions ,getDeliveryOption} from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
-
+import { renderCheckoutHeader } from "./checkoutHeader.js";
+import { calculateDeliveryDate } from "../../data/deliveryOptions.js";
 
 export function renderOrder(){
 
@@ -29,17 +30,15 @@ export function renderOrder(){
 
         const deliveryOptionsId = cartItem.deliveryOptionsId;
 
-        let deliveryOption=getDeliveryOption(deliveryOptionsId)
-
+        let deliveryOption=getDeliveryOption(deliveryOptionsId);
         deliveryOptions.forEach((option) => {
-          if (option.id === deliveryOptionsId) {
-            deliveryOption = option;
-          }
-        });
+                if (option.id === deliveryOptionsId) {
+                  deliveryOption = option;
+                }
+              });
+            
 
-        const today = dayjs();
-        const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
-        const dateString = deliveryDate.format("dddd, MMMM D");
+        let dateString=calculateDeliveryDate(deliveryOption);
 
         cartSummaryHTML += `
           <div class="cart-item-container 
@@ -101,9 +100,7 @@ export function renderOrder(){
       function deliveryOptionsHTML(matchingProduct, cartItem) {
             let html = "";
             deliveryOptions.forEach((deliveryOptions) => {
-              const today = dayjs();
-              const deliveryDate = today.add(deliveryOptions.deliveryDays, "days");
-              const dateString = deliveryDate.format("dddd, MMMM D");
+              const dateString=calculateDeliveryDate(deliveryOptions);
               const priceString =
                 deliveryOptions.priceCents === 0
                   ? "FREE"
@@ -144,6 +141,8 @@ export function renderOrder(){
                 `.js-cart-item-container-${productId}`
               );
               container.remove();
+              renderCheckoutHeader();
+              renderOrder();
               updateCartQuantity();
               renderPaymentSummary();
         });
