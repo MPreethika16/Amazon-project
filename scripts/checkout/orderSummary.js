@@ -42,6 +42,7 @@ export function renderOrder(){
 
         cartSummaryHTML += `
           <div class="cart-item-container 
+          js-cart-item-container
           js-cart-item-container-${matchingProduct.id}">
                   <div class="delivery-date">
                     Delivery date: ${dateString}
@@ -58,7 +59,8 @@ export function renderOrder(){
                       <div class="product-price">
                         $${formatCurrency(matchingProduct.priceCents)}
                       </div>
-                      <div class="product-quantity">
+                      <div class="product-quantity
+                      js-product-quantity-${matchingProduct.id}">
                         <span>
                           Quantity: <span class="quantity-label js-quantity-label-${
                             matchingProduct.id
@@ -75,7 +77,8 @@ export function renderOrder(){
                         <span class="save-quantity-link link-primary save-quantity-link js-save-link" data-product-id="${
                           matchingProduct.id
                         }" >Save</span>
-                        <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${
+                        <span class="delete-quantity-link link-primary js-delete-link js-delete-link-${matchingProduct.id}"
+                        data-product-id="${
                           matchingProduct.id
                         }">
                           Delete
@@ -141,9 +144,9 @@ export function renderOrder(){
                 `.js-cart-item-container-${productId}`
               );
               container.remove();
-              renderCheckoutHeader();
+              //renderCheckoutHeader();
               renderOrder();
-              updateCartQuantity();
+              //updateCartQuantity();
               renderPaymentSummary();
         });
       });
@@ -158,14 +161,14 @@ export function renderOrder(){
       });
 
 
-      function updateCartQuantity() {
-        const cartQuantity = calculateCartQuantity();
-        document.querySelector(
-          ".js-cart-quantity-header"
-        ).innerHTML = `${cartQuantity} items`;
-      }
+      // function updateCartQuantity() {
+      //   const cartQuantity = calculateCartQuantity();
+      //   document.querySelector(
+      //     ".js-cart-quantity-header"
+      //   ).innerHTML = `${cartQuantity} items`;
+      // }
 
-      updateCartQuantity();
+      // updateCartQuantity();
 
       document.querySelectorAll(".js-update-link").forEach((link) => {
         link.addEventListener("click", () => {
@@ -197,7 +200,7 @@ export function renderOrder(){
           );
           quantityLabel.innerHTML = newQuantity;
 
-          updateCartQuantity();
+          //updateCartQuantity();
         });
       });
     }
